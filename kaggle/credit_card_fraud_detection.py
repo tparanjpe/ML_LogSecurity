@@ -82,6 +82,9 @@ train=pd.get_dummies(train, drop_first=True)
 y_train=train['is_fraud'].values
 X_train=train.drop("is_fraud", axis='columns').values
 
+print(X_train)
+
+
 # testing dataset
 test=pd.read_csv('input/fraud-detection/fraudTest.csv')
 test['age']=dt.date.today().year-pd.to_datetime(test['dob']).dt.year
