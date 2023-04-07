@@ -8,9 +8,10 @@ import shapeless.syntax.std.tuple.unitTupleOps
 //import org.apache.spark.sql.functions.{col, dayofmonth, dayofweek, hour, month, to_date, year, months_between}
 import org.apache.spark.sql.functions._
 
-import org.apache.spark.ml.classification.LogisticRegression
+import org.apache.spark.ml.classification.{LogisticRegression, RandomForestClassifier}
 import org.apache.spark.ml.evaluation.BinaryClassificationEvaluator
 import org.apache.spark.ml.tuning.{ParamGridBuilder, TrainValidationSplit}
+
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -96,21 +97,28 @@ object Main {
     val trainData = indexer.transform(assembler.transform(inputDF)).select("features", "label")
     val testData = indexerTest.transform(assembler.transform(inputTestDF)).select("features", "label")
 
-//    val Array(trainingData, validationData) = trainDataWithFeatures.randomSplit(Array(0.8, 0.2), seed = 12345)
+    //    val Array(trainingData, validationData) = trainDataWithFeatures.randomSplit(Array(0.8, 0.2), seed = 12345)
 
     // Logistic regression model
     val lr = new LogisticRegression()
     val lrModel = lr.fit(trainData)
-    val predictions = lrModel.transform(testData)
+    val lrPredictions = lrModel.transform(testData)
 
-    val accuracy = predictions.filter(col("is_fraud") === col("prediction")).count().toDouble / testData.count()
+    val accuracy = lrPredictions.filter(col("is_fraud") === col("prediction")).count().toDouble / testData.count()
 
-     //    val accuracy = predictions.filter($"is_fraud" === $"prediction").count().toDouble / X_test.count()
     println(s"Accuracy: ${accuracy * 100}%")
+
+    // Random forest model
+    val rf = new RandomForestClassifier().setMaxBins(81)
+    val rfModel = rf.fit(trainData)
+    val rfPredictions = rfModel.transform(testData)
+    val rfAccuracy = rfPredictions.filter(col("is_fraud") === col("prediction")).count().toDouble / testData.count()
+
+    println(s"Accuracy: ${rfAccuracy * 100}%")
+
+
 
 
     spark.stop()
   }
 }
-
-
