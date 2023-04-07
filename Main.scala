@@ -85,24 +85,24 @@ object Main {
     y_test.show()
     X_test.show()
 
-    // Define the feature columns you want to use for training
-    val featureCols = Array("category_encoded", "amt", "gender_encoded", "age_encoded")
+//     // Define the feature columns you want to use for training
+//     val featureCols = Array("category_encoded", "amt", "gender_encoded", "age_encoded")
 
-    // Assemble the feature columns into a feature vector column
-    val assembler = new VectorAssembler().setInputCols(featureCols).setOutputCol("features")
-    val trainDataWithFeatures = assembler.transform(X_train)
+//     // Assemble the feature columns into a feature vector column
+//     val assembler = new VectorAssembler().setInputCols(featureCols).setOutputCol("features")
+//     val trainDataWithFeatures = assembler.transform(X_train)
 
-    val Array(trainingData, validationData) = trainDataWithFeatures.randomSplit(Array(0.8, 0.2), seed = 12345)
+//     val Array(trainingData, validationData) = trainDataWithFeatures.randomSplit(Array(0.8, 0.2), seed = 12345)
 
-    // Logistic regression model
-    val lr = new LogisticRegression()
-    val lrModel = lr.fit(trainingData)
-    val predictions = lrModel.transform(validationData)
+//     // Logistic regression model
+//     val lr = new LogisticRegression()
+//     val lrModel = lr.fit(trainingData)
+//     val predictions = lrModel.transform(validationData)
 
-    val accuracy = predictions.filter(col("is_fraud") === col("prediction")).count().toDouble / validationData.count()
+//     val accuracy = predictions.filter(col("is_fraud") === col("prediction")).count().toDouble / validationData.count()
 
-//    val accuracy = predictions.filter($"is_fraud" === $"prediction").count().toDouble / X_test.count()
-    println(s"Accuracy: ${accuracy * 100}%")
+// //    val accuracy = predictions.filter($"is_fraud" === $"prediction").count().toDouble / X_test.count()
+//     println(s"Accuracy: ${accuracy * 100}%")
 
 
     spark.stop()
