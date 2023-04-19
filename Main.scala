@@ -17,7 +17,7 @@ import org.apache.log4j.{Level, Logger}
 
 object Main {
   def main(args: Array[String]): Unit = {
-    Logger.getRootLogger.setLevel(Level.INFO)
+    Logger.getRootLogger.setLevel(Level.ALL) // set the level
     println("Hello world!")
     val spark = SparkSession.builder()
       .appName("Fraud")
