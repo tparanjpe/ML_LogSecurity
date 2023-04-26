@@ -99,6 +99,23 @@ object tpcWorkload {
     val result = frequency.join(ratio, Seq("o_customer_sk"), "inner")
     print(result.show())
 
+    val assembler = new VectorAssembler()
+      .setInputCols(Array("return_ratio", "frequency"))
+      .setOutputCol("features")
+
+    val mms = new MinMaxScaler()
+      .setInputCol("features")
+      .setOutputCol("scaledFeatures")
+
+    val kmeans = new KMeans()
+      .setK(4)
+      .setSeed(0)
+
+
+    val pipeline = new Pipeline()
+      .setStages(Array(assembler, mms, kmeans))
+
+    val model = pipeline.fit(result)
 
     spark.stop()
   }
