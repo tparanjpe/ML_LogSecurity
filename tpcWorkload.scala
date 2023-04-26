@@ -116,6 +116,9 @@ object tpcWorkload {
       .setStages(Array(assembler, mms, kmeans))
 
     val model = pipeline.fit(result)
+    val predictions = model.transform(result)
+    print(predictions)
+
 
     spark.stop()
   }
