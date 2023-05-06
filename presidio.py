@@ -1,7 +1,6 @@
 from presidio_analyzer import AnalyzerEngine
 from presidio_anonymizer import AnonymizerEngine
 
-text="My phone number is 212-555-5555"
 text_file = open("fraudLog.log", "r")
  
 #read whole file to a string
